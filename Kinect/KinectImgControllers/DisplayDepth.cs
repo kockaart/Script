@@ -17,8 +17,8 @@ public class DisplayDepth : MonoBehaviour {
 	void Update () {
 		if (dw.pollDepth())
 		{
-			//tex.SetPixels32(convertDepthToColor(dw.depthImg));
-			tex.SetPixels32(convertPlayersToCutout(dw.segmentations));
+			tex.SetPixels32(convertDepthToColor(dw.depthImg));
+			//tex.SetPixels32(convertPlayersToCutout(dw.segmentations));
 			tex.Apply(false);
 		}
 	}
@@ -43,7 +43,7 @@ public class DisplayDepth : MonoBehaviour {
 			if(players[0,pix]|players[1,pix]|players[2,pix]|players[3,pix]|players[4,pix]|players[5,pix])
 			{
 				//max 255
-				img[pix].a = (byte)100;
+				img[pix].a = (byte)255;
 			} else {
 				img[pix].a = (byte)0;
 			}
