@@ -6,7 +6,7 @@ public class DisplayDepth : MonoBehaviour {
 	
 	public DepthWrapper dw;
 	
-	private Texture2D tex;
+	public Texture2D tex;
 	// Use this for initialization
 	void Start () {
 		tex = new Texture2D(320,240,TextureFormat.ARGB32,false);
@@ -17,8 +17,8 @@ public class DisplayDepth : MonoBehaviour {
 	void Update () {
 		if (dw.pollDepth())
 		{
-			tex.SetPixels32(convertDepthToColor(dw.depthImg));
-			//tex.SetPixels32(convertPlayersToCutout(dw.segmentations));
+			//tex.SetPixels32(convertDepthToColor(dw.depthImg));
+			tex.SetPixels32(convertPlayersToCutout(dw.segmentations));
 			tex.Apply(false);
 		}
 	}
@@ -42,7 +42,8 @@ public class DisplayDepth : MonoBehaviour {
 		{
 			if(players[0,pix]|players[1,pix]|players[2,pix]|players[3,pix]|players[4,pix]|players[5,pix])
 			{
-				img[pix].a = (byte)255;
+				//max 255
+				img[pix].a = (byte)100;
 			} else {
 				img[pix].a = (byte)0;
 			}
