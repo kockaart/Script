@@ -8,7 +8,7 @@ public class LoadImage : MonoBehaviour {
 	public Texture2D photo;
 
 	// Update is called once per frame
-	public IEnumerator Load () {
+	public IEnumerator Start () {
 		// Create a texture in DXT1 format
 		photo = new Texture2D(4, 4, TextureFormat.DXT1, false);
 		renderer.material.mainTexture = photo;

@@ -11,6 +11,7 @@ public class SoccerPlayer : MonoBehaviour {
 	public GameObject Head;
 	public GameObject Foot_Left;
 	public GameObject Foot_Right;
+	public GameObject plane;
 	
 	public Texture2D come;
 	public Texture2D leftK1;
@@ -263,6 +264,7 @@ public class SoccerPlayer : MonoBehaviour {
 		
 		if (kicksLeft==0 && counter2<time2 && counter2>0 & !play){
 			//if (counter2==1 || counter2==30) loadImage.Load();
+			plane.active=true;
 			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), result);
 			GUI.skin = menuSkin3;
 			GUI.Box (new Rect (Screen.width/4, Screen.height*5/20,600,60), comment3);
@@ -280,6 +282,8 @@ public class SoccerPlayer : MonoBehaviour {
 			//*screenshot comes and made here
 			counter2++;
 		}
+		else plane.active=false;
+
 		if (posRight.z == 0 | previous == Head.transform.localPosition.z) { 
 			kicksLeft = 5;
 			approach=true;
