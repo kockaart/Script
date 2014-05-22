@@ -4,7 +4,7 @@ using System.Collections;
 public class LoadImage : MonoBehaviour {
 
 	// and DXT compress them at runtime
-	public string  url = "file://localhost/"+Application.dataPath+"/../Photo.jpg";
+	public string  url = "file://localhost/"+Application.dataPath+"/../photo.png";
 	public Texture2D photo;
 
 	// Update is called once per frame

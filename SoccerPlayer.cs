@@ -4,6 +4,8 @@ using System.Collections;
 public class SoccerPlayer : MonoBehaviour {
 	
 	public LoadImage loadImage;
+	private Color guiColor;
+	public KinectManager km;
 	
 	public Vector3 posLeft;
 	public Vector3 posRight;
@@ -20,7 +22,6 @@ public class SoccerPlayer : MonoBehaviour {
 	public Texture2D leftK4;
 	public Texture2D leftK5;
 	public Texture2D result;
-	public Texture2D silhouette;
 	public Texture2D picture;
 	public MovieTexture loop;
 	public MovieTexture lf;
@@ -72,7 +73,7 @@ public class SoccerPlayer : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
+		guiColor = Color.white;
 	}
 	
 	// Update is called once per frame
@@ -200,6 +201,7 @@ public class SoccerPlayer : MonoBehaviour {
 			if (kicksLeft==0 && counter2<time2 && counter2>0 && !play) counter2++;
 			if (kicksLeft>0 && !play && animation>animationTime){	
 				counter++;
+				plane.active=true;
 				if (counter>8  && ((right5-right)>sensitivity || ((left5-left)>sensitivity))){
 					random = Random.Range(0, 5);
 					if (random==0){
@@ -258,13 +260,16 @@ public class SoccerPlayer : MonoBehaviour {
 			GUI.skin = menuSkin2;
 			GUI.Box (new Rect (Screen.width-500, Screen.height-170,360,90), name);
 		}
-		
-		if (play == false && approach == false && animation>animationTime)
-			GUI.DrawTexture(new Rect(Screen.width/2-135, 160, 263, 800), silhouette);
-		
+
+		if (play == false && approach == false && animation>animationTime){
+			guiColor.a = 0.28f;
+			GUI.color = guiColor; //sets all next gui color to transparetn 0,5
+			//guiTexture.color = colorT;
+			GUI.DrawTexture(new Rect(Screen.width*5/40, Screen.height*9/10, Screen.width*15/20, -Screen.height*8/10), km.usersLblTex);
+			GUI.color = Color.white; //sets it back
+		}
 		if (kicksLeft==0 && counter2<time2 && counter2>0 & !play){
 			//if (counter2==1 || counter2==30) loadImage.Load();
-			plane.active=true;
 			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), result);
 			GUI.skin = menuSkin3;
 			GUI.Box (new Rect (Screen.width/4, Screen.height*5/20,600,60), comment3);
