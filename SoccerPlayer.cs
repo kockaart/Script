@@ -5,6 +5,8 @@ using System.Collections;
 
 public class SoccerPlayer : MonoBehaviour
 {
+    public Transform prefab;
+
     private Color guiColor;
     public KinectManager km;
 	public LoadImage lm;
