@@ -6,8 +6,7 @@ public class LoadImage : MonoBehaviour {
 	// and DXT compress them at runtime
 	public string  url = "file://localhost/"+Application.dataPath+"/../player_photo.png";
 	public Texture2D photo;
-
-
+	
 	//public TextAsset txt;
 	public string name= "Please set name";
 
@@ -29,5 +28,17 @@ public class LoadImage : MonoBehaviour {
 		Resources.UnloadAsset(txt);
 
 		print(name);
+		
+		
+	}
+	void Update(){
+		Destroy(txt);
+		Destroy(tex);
+		Resources.UnloadAsset(txt);
+		Resources.UnloadAsset(tex);
+		GC.Collect()
+		Resources.UnloadUnusedAssets();
+		GC.Collect()
+		
 	}
 }
