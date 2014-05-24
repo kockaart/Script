@@ -2,43 +2,31 @@
 using System.Collections;
 
 public class LoadImage : MonoBehaviour {
-
-	// and DXT compress them at runtime
-	public string  url = "file://localhost/"+Application.dataPath+"/../player_photo.png";
-	public Texture2D photo;
 	
-	//public TextAsset txt;
+	public string  urlP = "file://localhost/"+Application.dataPath+"/../player_photo.png";
+	public string  urlN = "file://localhost/"+Application.dataPath+"/../player_name.txt";
+	public Texture2D photo;
 	public string name= "Please set name";
 
-	// Update is called once per frame
-	void Start() {
+	IEnumerator Start () {
 		// Create a texture in DXT1 format
+		// and DXT compress them at runtime
 		//Texture texture_title=Resources.Load("title5") as Texture;
 		//GameObject.Find("title").renderer.material.mainTexture=texture_title;
 
-		Texture2D tex=Resources.Load("player_photo") as Texture2D;
-		photo = tex;
-		this.renderer.material.mainTexture=photo;
-		Resources.UnloadAsset(tex);
-
-
-		TextAsset txt = (TextAsset)Resources.Load("player_name", typeof(TextAsset));
-		//txt.Load();
-		name = txt.text;
-		Resources.UnloadAsset(txt);
-
-		print(name);
-		
-		
+		photo = new Texture2D(4, 4, TextureFormat.DXT1, false);
+		renderer.material.mainTexture = photo;
+		while(true) {
+			// Start a download of the given URL
+			WWW wwwP = new WWW(urlP);
+			WWW wwwN = new WWW(urlN);
+			// wait until the download is done
+			yield return wwwP;
+			// assign the downloaded image to the main texture of the object
+			wwwP.LoadImageIntoTexture(photo);
+			yield return wwwN;
+			name=wwwN.text;
+		}
 	}
-	void Update(){
-		Destroy(txt);
-		Destroy(tex);
-		Resources.UnloadAsset(txt);
-		Resources.UnloadAsset(tex);
-		GC.Collect()
-		Resources.UnloadUnusedAssets();
-		GC.Collect()
-		
-	}
+	
 }

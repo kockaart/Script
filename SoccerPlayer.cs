@@ -4,9 +4,7 @@ using System.Collections;
 [RequireComponent (typeof(AudioSource))]
 
 public class SoccerPlayer : MonoBehaviour
-{
-    public Transform prefab;
-
+{   
     private Color guiColor;
     public KinectManager km;
 	public LoadImage lm;
@@ -89,7 +87,7 @@ public class SoccerPlayer : MonoBehaviour
     {
         guiColor = Color.white;
 		movTexture = lg;
-		resTexture = movTexture;
+		resTexture = lg;
     }
 
     // Update is called once per frame
@@ -120,17 +118,23 @@ public class SoccerPlayer : MonoBehaviour
         left3 = left4;
         left4 = left5;
         left5 = Foot_Left.transform.localPosition;
+		
+		if(approach) plane.GetComponent<LoadImage>().enabled = false;
+		if(!approach) plane.GetComponent<LoadImage>().enabled = true;
 
         //		if (Input.anyKey){
         //			Debug.Log("A key or mouse click has been detected");
-        //
         //		}
-    }
 
+    }
+	public GUISkin menuSkin1;
     public GUISkin menuSkin2;
     public GUISkin menuSkin3;
     public GUISkin menuSkin4;
-    public string name = "ALEXANDR!";
+    //public string name = "Name!";
+	//public string comment = "You are an awesome kicker!";
+	public string like = "LIKE YOUR result on FB";
+	public string link = "vk.com/cocaccola_ukr";
 
     void OnGUI()
     {
@@ -141,32 +145,27 @@ public class SoccerPlayer : MonoBehaviour
 			if (!rg.isPlaying) rg.Stop();
 			if (!cf.isPlaying) cf.Stop();
 			if (!cg.isPlaying) cg.Stop();
-			if (!result.isPlaying){
-				result.Stop();
-				renderer.enabled=false;
-			}
-			if (!result1.isPlaying){
-				result1.Stop();
-				renderer.enabled=false;
-			}
-			if (!result2.isPlaying){
-				result.Stop();
-				renderer.enabled=false;
-			}
-			if (!result3.isPlaying){
-				result.Stop();
-				renderer.enabled=false;
-			}
-			if (!result4.isPlaying){
-				result.Stop();				
-				renderer.enabled=false;
-			}
-			if (!result5.isPlaying){ 
-				result.Stop();
-				renderer.enabled=false;
-			}
 		}
-		
+		if (!resTexture.isPlaying){
+			if (!result.isPlaying) result.Stop();
+			if (!result1.isPlaying)	result1.Stop();
+			if (!result2.isPlaying)	result.Stop();
+			if (!result3.isPlaying) result.Stop();
+			if (!result4.isPlaying)	result.Stop();
+			if (!result5.isPlaying)	result.Stop();
+			renderer.enabled=false;			
+		}
+
+		if (resTexture.isPlaying){
+			renderer.enabled=true;
+			resTexture.Play();
+			playResult = true;
+		}
+		else{
+			playResult = false;
+			renderer.enabled=false;
+			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), loop);
+		}
 		if (movTexture.isPlaying){
 			play = true;
 			counter3++;
@@ -174,41 +173,30 @@ public class SoccerPlayer : MonoBehaviour
 		else{
 			play = false;
 			counter3=0;
+			loop.loop = true;
+			loop.Play();
 		}
-
-		if (resTexture.isPlaying){
-			playResult = true;
-			movTexture.Play();
-		}
-		else if (result.isPlaying) playResult = true;
-		else if (result1.isPlaying) playResult = true;
-		else if (result2.isPlaying) playResult = true;
-		else if (result3.isPlaying) playResult = true;
-		else if (result4.isPlaying) playResult = true;
-		else if (result5.isPlaying) playResult = true;
-		else playResult = false;
-
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), loop);
-        loop.Play();
-        loop.loop = true;
-
-        if (play && counter3>5)
+		
+        if (play && counter3>7)
         {
 			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), movTexture);
 			movTexture.Play();
         }
+		if (playResult)
+		{
+			resTexture.Play();
+		}
 
         //player present
         if (posRight.z != 0 && previous != Head.transform.localPosition.z)
         {
             approach = false;
-            if (kicksLeft == 0 && counter2 < time2 && counter2 > 0 && !play) counter2++;
+
+			if (kicksLeft == 0 && !play) counter2++;
             if (kicksLeft > 0 && !play && animation > animationTime)
             {		
 				//print (Mathf.Abs((right5.x) - (right.x)));
-                counter++;
-                //plane.active = true;
-				plane.GetComponent<LoadImage>().enabled = true;
+                counter++;             
                 //right leg
                 if (counter > 8 && (right5.z - right.z) > sensitivity )
                 {
@@ -326,56 +314,59 @@ public class SoccerPlayer : MonoBehaviour
             {
                 GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK1);
             }
-            GUI.skin = menuSkin2;
-            GUI.Box(new Rect(Screen.width*2/3, Screen.height*9/10, 460, 120), lm.name);
+            GUI.skin = menuSkin1;
+            GUI.Box(new Rect(Screen.width*15/20, Screen.height*18/20, 460, 120), lm.name);
         }
 
-        if (play == false && approach == false && animation > animationTime)
+		if (!play && !playResult && approach == false && animation > animationTime)
         {
-			print ("silhouette");
+			//print ("silhouette");
             guiColor.a = 0.28f;
             GUI.color = guiColor; //sets all next gui color to transparent 0,5
             //guiTexture.color = colorT;
             GUI.DrawTexture(new Rect(Screen.width * 5 / 40, Screen.height, Screen.width * 15 / 20, -Screen.height * 8 / 10), km.usersLblTex);
             GUI.color = Color.white; //sets it back
         }
-        if (kicksLeft == 0 && counter2 > 0 && !play) {
-			if(score==0) movTexture=result;
-			if(score==1) movTexture=result1;
-			if(score==2) movTexture=result2;
-			if(score==3) movTexture=result3;
-			if(score==4) movTexture=result4;
-			if(score==5) movTexture=result5;
+        if (kicksLeft == 0 && counter2 == 1 && !play) {
+			if(score==0) resTexture=result;
+			if(score==1) resTexture=result1;
+			if(score==2) resTexture=result2;
+			if(score==3) resTexture=result3;
+			if(score==4) resTexture=result4;
+			if(score==5) resTexture=result5;
 
-
-			movTexture = renderer.material.mainTexture as MovieTexture;
-			movTexture.Play();
+			renderer.material.mainTexture = resTexture;
+			resTexture.Play();
+			playResult=true;
 			renderer.enabled=true;
+		}
+		if (kicksLeft == 0 && counter2 > 1 && playResult) {
 
-			GUI.skin = menuSkin4;
-			GUI.Box (new Rect (Screen.width / 4, Screen.height * 5 / 20, 560, 90), lm.name);
-			if (counter2 > 10) {
-					GUI.skin = menuSkin3;
-					GUI.Box (new Rect (Screen.width / 4, Screen.height * 12 / 20, 650, 150), "LIKE YOUR result on FB/adress!");
-			}
+			GUI.skin = menuSkin2;
+			GUI.Box (new Rect (Screen.width / 2, Screen.height / 19, Screen.width / 2, Screen.height / 4), lm.name);
+//			GUI.skin = menuSkin3;
+//			GUI.Box (new Rect (Screen.width *6 / 11, Screen.height * 5 / 20, Screen.width / 2, Screen.height / 9), comment);
+//			if (counter2 > 11) {
+//				GUI.skin = menuSkin4;
+//				GUI.Box (new Rect (Screen.width *6 / 11, Screen.height * 15/ 20, Screen.width /2, Screen.height / 9), like);
+//				GUI.Box (new Rect (Screen.width *6 / 11, Screen.height * 17 / 20, Screen.width /2, Screen.height / 9), link);
+//			}
+
 			//*screenshot comes and made here
-			if (counter2 == 10 && score > 2) {
-					Application.CaptureScreenshot (no + ". " + lm.name + " " + score + " goal.png", 4);
-					no++;
+			if ((counter2 == 100 || counter2 == 134) && score > 2) {
+				Application.CaptureScreenshot (no + ". " + lm.name + " " + score + " goal.png", 4);
+				no++;
+				print("shot");
 			}
-			//
-			guiColor.a = 0.3f;
-			GUI.color = guiColor; //sets all next gui color to transparent 0,5
-			//guiTexture.color = colorT;
-			GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), shining);
-			shining.Play ();
-			GUI.color = Color.white; //sets it back
+//			guiColor.a = 0.3f;
+//			GUI.color = guiColor; //sets all next gui color to transparent 0,5
+//			//guiTexture.color = colorT;
+//			GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), shining);
+//			shining.Play ();
+//			GUI.color = Color.white; //sets it back
 
 			counter2++;
-		} else {
-				plane.GetComponent<LoadImage> ().enabled = false;
 		}
-
 
 		//restart
         if (posRight.z == 0 | previous == Head.transform.localPosition.z)
@@ -383,16 +374,14 @@ public class SoccerPlayer : MonoBehaviour
             kicksLeft = 5;
             approach = true;
             counter2 = 0;
+			score = 0;
         }
-        if (kicksLeft == 0 && !play)
-        {
-            if (counter2 == 0) counter2++;
-            if (counter2 >= time2)
-            {
-                kicksLeft = 5;
-                approach = true;
-                counter2 = 0;
-            }
+		if (kicksLeft == 0 && counter2 > 20 && !play && !playResult)
+        {           
+     		kicksLeft = 5;
+       		approach = true;
+       		counter2 = 0;
+			score = 0;            
         }
         if (approach)
         {
