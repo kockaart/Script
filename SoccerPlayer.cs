@@ -8,6 +8,7 @@ public class SoccerPlayer : MonoBehaviour
     private Color guiColor;
     public KinectManager km;
 	public LoadImage lm;
+	public float timeScale=0;
 
     public Vector3 posLeft;
     public Vector3 posRight;
@@ -96,6 +97,7 @@ public class SoccerPlayer : MonoBehaviour
         posRight = Foot_Right.transform.localPosition;
         posLeft = Foot_Left.transform.localPosition;
         posHead = Head.transform.localPosition;
+		Time.timeScale=2.2f;
 
         previous = previous1;
         previous1 = previous2;
@@ -292,34 +294,35 @@ public class SoccerPlayer : MonoBehaviour
             }
         }
 
-        if (counter > 0 && kicksLeft > 0 && approach == false && animation > animationTime && !play)
-        {
-            if (kicksLeft == 5)
-            {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK5);
-            }
-            if (kicksLeft == 4)
-            {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK4);
-            }
-            if (kicksLeft == 3)
-            {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK3);
-            }
-            if (kicksLeft == 2)
-            {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK2);
-            }
-            if (kicksLeft == 1)
-            {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK1);
-            }
-            GUI.skin = menuSkin1;
-            GUI.Box(new Rect(Screen.width*15/20, Screen.height*18/20, 460, 120), lm.name);
-        }
+//        if (counter > 0 && kicksLeft > 0 && approach == false && animation > animationTime && !play)
+//        {
+//           
+//        }
 
 		if (!play && !playResult && approach == false && animation > animationTime)
         {
+			if (kicksLeft == 5)
+			{
+				GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK5);
+			}
+			if (kicksLeft == 4)
+			{
+				GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK4);
+			}
+			if (kicksLeft == 3)
+			{
+				GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK3);
+			}
+			if (kicksLeft == 2)
+			{
+				GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK2);
+			}
+			if (kicksLeft == 1)
+			{
+				GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), leftK1);
+			}
+			GUI.skin = menuSkin1;
+			GUI.Box(new Rect(Screen.width*15/20, Screen.height*18/20, 460, 120), lm.name);
 			//print ("silhouette");
             guiColor.a = 0.28f;
             GUI.color = guiColor; //sets all next gui color to transparent 0,5
