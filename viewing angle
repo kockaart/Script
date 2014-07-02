@@ -1,0 +1,51 @@
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(AudioSource))]
+
+public class ViewingMaster : MonoBehaviour
+{
+	private Color guiColor;
+	public KinectManager km;
+	
+	[System.Serializable]
+	public class TextureList
+	{
+		public Texture[] textures;
+		
+	}
+	public TextureList[] textureLists;
+	
+	public Texture2D[] picture;    
+	public MovieTexture intro;
+	public MovieTexture[] change;
+	public MovieTexture[] video;
+	
+	public AudioClip[] audio;
+	public AudioClip loop;
+	public AudioClip changeA;
+	
+	private MovieTexture movTexture;
+	
+	// Use this for initialization
+	void Start()
+	{
+		guiColor = Color.white;
+		movTexture = intro;
+//		audio[1].clip = loop;
+//		audio.loop = true;
+//		audio.Play();
+	}
+	
+	// Update is called once per frame
+	void Update()
+	{
+		
+		
+	}
+	
+	void OnGUI()
+	{
+		
+	}
+}   
